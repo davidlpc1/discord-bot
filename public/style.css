@@ -70,13 +70,25 @@ main {
 }
 
 main img {
-    max-width: 80rem;
+    max-width: 40rem;
 }
 
 main ul {
     list-style: none;
     padding-left:5rem;
 }
+
+@media (min-width:850px ){
+   main img {
+    max-width: 80rem;
+   }
+}
+
+@media (max-width:500px ){
+    main img {
+     max-width: 20rem;
+    }
+ }
 
 footer {
     width:100%;
