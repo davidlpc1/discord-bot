@@ -7,7 +7,7 @@ const { bot_token } = process.env
 module.exports = async function (){
     bot.login(bot_token)
     bot.on('ready',() => {
-        console.log("> I'm working");
+        console.log("> Bot is working");
     })
     
     async function clear(msg){
@@ -21,9 +21,9 @@ module.exports = async function (){
     } 
     
     bot.on("message",msg => {
-        if(msg.content.toLowerCase() === "!clear"){
+        if(msg.content.toLowerCase() === "dl.clear"){
             clear(msg)
-            console.log("> Messages cleaned")
+            console.log("> Bot cleaned messages")
         }
     })
 }
