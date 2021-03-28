@@ -21,9 +21,15 @@ module.exports = async function (){
     } 
     
     bot.on("message",msg => {
-        if(msg.content.toLowerCase() === "dl.clear"){
+        const msgContent = msg.content.toLowerCase();
+        if(msgContent === "dl.clear"){
             clear(msg)
             console.log("> Bot cleaned messages")
         }
+        else if(msgContent === "dl.status"){
+            // In the future,we will show real results of the bot status
+            msg.reply("Tudo ok por aqui,obrigado por perguntar")
+        }
+
     })
 }
