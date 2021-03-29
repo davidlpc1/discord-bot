@@ -2,7 +2,9 @@ const Discord = require('discord.js');
 
 const bot = new Discord.Client();
 
-const { bot_token } = process.env
+const { bot_token,news_api_key } = process.env
+
+const axios = require('axios')
 
 module.exports = async function (){
     bot.login(bot_token)
@@ -20,7 +22,7 @@ module.exports = async function (){
             .catch(err => console.log({ err,situation:"Clear Function" }))
     } 
     
-    bot.on("message",msg => {
+    bot.on("message",async msg => {
         const msgContent = msg.content.toLowerCase();
         if(msgContent === "dl.clear"){
             clear(msg)
@@ -29,6 +31,12 @@ module.exports = async function (){
         else if(msgContent === "dl.status"){
             // In the future,we will show real results of the bot status
             msg.reply("Tudo ok por aqui,obrigado por perguntar")
+        }else if(msgContent === "dl.news"){
+            const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=BR&apiKey=${news_api_key}`)
+            const { articles } = await response.data
+            const titles = articles.map(article => article.title)
+            const content = titles.join("\n  - ")
+            msg.reply(content)
         }
 
     })

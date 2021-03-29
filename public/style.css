@@ -81,6 +81,10 @@ main ul li {
     padding-left:4rem;
 }
 
+main ul li:hover{
+    text-decoration:underline;
+}
+
 @media (min-width:850px ){
    main img {
     max-width: 80rem;
