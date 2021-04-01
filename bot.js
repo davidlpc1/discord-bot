@@ -12,32 +12,38 @@ module.exports = async function (){
         console.log("> Bot is working");
     })
     
-    async function clear(msg){
-        if(!msg.member.hasPermission("MANAGE_MESSAGES")) return msg.reply("Você não tem poder para isso!")
+    const commands = {
+        clear:async (msg) => {
+            if(!msg.member.hasPermission("MANAGE_MESSAGES")) return msg.reply("Você não tem poder para isso!")
     
-        const deleteCount = 99;
-        const fetched = await msg.channel.messages.fetch({ limit: deleteCount + 1});
-        msg.channel
-            .bulkDelete(fetched)
-            .catch(err => console.log({ err,situation:"Clear Function" }))
-    } 
+            const deleteCount = 99;
+            const fetched = await msg.channel.messages.fetch({ limit: deleteCount + 1});
+            msg.channel
+                .bulkDelete(fetched)
+                .catch(err => console.log({ err,situation:"Clear Function" }))
+                console.log("> Bot cleaned messages")
+        },
+        status:async (msg) => {
+            // In the future,we will show real results of the bot status
+            msg.reply("Tudo ok por aqui,obrigado por perguntar")
+        },
+        news:async (msg) => {
+            const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=BR&apiKey=${news_api_key}`)
+            const { articles } = await response.data
+
+            const titles = articles.map(article => article.title)
+            const content = titles.join("\n  - ")
+
+            msg.reply(content)
+        }
+    }
+
     
     bot.on("message",async msg => {
         const msgContent = msg.content.toLowerCase();
-        if(msgContent === "dl.clear"){
-            clear(msg)
-            console.log("> Bot cleaned messages")
-        }
-        else if(msgContent === "dl.status"){
-            // In the future,we will show real results of the bot status
-            msg.reply("Tudo ok por aqui,obrigado por perguntar")
-        }else if(msgContent === "dl.news"){
-            const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=BR&apiKey=${news_api_key}`)
-            const { articles } = await response.data
-            const titles = articles.map(article => article.title)
-            const content = titles.join("\n  - ")
-            msg.reply(content)
-        }
+        const command = msgContent.replace('dl.','');
+        const commandFn = commands[command];
+        if(commandFn) commandFn(msg);
 
     })
 }
