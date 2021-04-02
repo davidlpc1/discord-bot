@@ -47,6 +47,7 @@ module.exports = async function () {
   bot.on("message", async (msg) => {
     try {
       const msgContent = msg.content.toLowerCase();
+      if(msgContent.indexOf("dl.") <= -1) return;
       const command = msgContent.replace("dl.", "");
       const commandFn = commands[command];
       if (commandFn) commandFn(msg);
