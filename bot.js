@@ -42,6 +42,15 @@ module.exports = async function () {
 
       msg.reply(content);
     },
+    covid: async (msg) => {
+      const response = await axios.get(
+        "https://covid19-brazil-api.now.sh/api/report/v1/brazil"
+      );
+      const { data } = await response.data;
+      const { cases,deaths,recovered } = data;
+
+      msg.reply(`No Brasil há ${parseInt(cases)} casos,${parseInt(deaths)} mortos e ${parseInt(recovered)} recuperados de Covid-19`);
+    },
   };
 
   bot.on("message", async (msg) => {
@@ -50,7 +59,10 @@ module.exports = async function () {
       if(msgContent.indexOf("dl.") <= -1) return;
       const command = msgContent.replace("dl.", "");
       const commandFn = commands[command];
-      if (commandFn) commandFn(msg);
+      if (commandFn){
+        console.log(`> Starting command ${commandFn.name}`)
+        commandFn(msg);
+      }
     } catch (err) {
       console.error({ ...err, date: new Date() });
       msg.reply(
